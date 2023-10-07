@@ -1,23 +1,36 @@
-import React from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App";
-import { ThirdwebProvider } from "@thirdweb-dev/react";
-import "./styles/globals.css";
+import React from 'react';
+import { createRoot } from 'react-dom/client'; // Import createRoot from 'react-dom'
 
-// This is the chain your dApp will work on.
-// Change this to the chain your app is built for.
-// You can also import additional chains from `@thirdweb-dev/chains` and pass them directly.
-const activeChain = "ethereum";
+import { BrowserRouter as Router } from 'react-router-dom';
+import { ChainId, ThirdwebProvider } from '@thirdweb-dev/react';
 
-const container = document.getElementById("root");
-const root = createRoot(container);
-root.render(
-  <React.StrictMode>
-    <ThirdwebProvider
-      clientId={import.meta.env.VITE_TEMPLATE_CLIENT_ID}
-      activeChain={activeChain}
-    >
-      <App />
-    </ThirdwebProvider>
-  </React.StrictMode>
-);
+import { StateContextProvider } from './context';
+import App from './App';
+import './index.css';
+
+// Obtain a reference to the root element in your HTML
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  // Create a root using the root element
+  const root = createRoot(rootElement);
+
+  // Render your React app within the root
+  root.render(
+    <React.StrictMode>
+      <ThirdwebProvider
+        desiredChainId={ChainId.Goerli}
+        activeChain="goerli"
+        clientId="c5ffbef65d36f36c9326e43c882bafc4"
+      >
+        <Router>
+          <StateContextProvider>
+            <App />
+          </StateContextProvider>
+        </Router>
+      </ThirdwebProvider>
+    </React.StrictMode>
+  );
+} else {
+  console.error('The "root" element does not exist in the DOM.');
+}
